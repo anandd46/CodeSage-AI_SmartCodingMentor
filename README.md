@@ -1,123 +1,121 @@
-# CodeSage AI — Production-Ready AI Coding Platform
+# CodeSage AI — Production-Grade AI Programming Mentor Platform
 
-CodeSage AI is an advanced, production-grade programming mentorship platform designed to help developers master Data Structures and Algorithms (DSA), solve real-world coding problems, participate in mock interviews, and debug issues with explainable AI. 
+Created and Engineered by **Anand D**
 
-Built using a modern full-stack architecture (**Next.js**, **FastAPI**, **MongoDB**), it features gamified learning loops (XP, levels, streaks, badges) and real-time state synchronization.
+CodeSage AI is an advanced, production-grade programming mentorship platform designed to help developers master Data Structures and Algorithms (DSA), solve coding challenges, practice mock interviews, and debug source code using explainable AI. 
 
----
-
-## 🚀 Key Features & Architectural Upgrades
-
-### 1. Custom Code Editor & Language Selector
-- **Custom Language Dropdown**: Overcomes HTML `select` constraints. Implements a React-based custom dropdown overlay styled with Tailwind CSS, utilizing a high `z-index` and document-level click listeners to close cleanly. Uses Framer Motion for premium scale and fade animations.
-- **Sleek Minimalist Editor**: Removed mock macOS-style window controls, reclaiming valuable space to realign the toolbar cleanly. Designed for high-density, professional SaaS aesthetics.
-
-### 2. Local Fallback Execution Engine
-- **Zero Configuration Required**: The platform is fully prepared to execute code locally when external RapidAPI Judge0 API Keys are omitted.
-- **Multi-language Support**: Automatically compiles and runs **Python**, **JavaScript**, **C++**, **C**, and **Java** processes securely using Python's `subprocess` subsystem on the host machine.
-- **Execution sandboxing details**: Captures stdout, stderr, execution time, and exit codes gracefully.
-
-### 3. Dynamic Real-Time Dashboard
-- **No Manual Reloads**: Integrates a client-side **WebSocket listener** linking the user's dashboard directly to the backend. State updates are broadcasted automatically from FastAPI whenever the user solves a challenge, runs code, completes a quiz, or earns XP.
-- **Dynamic Heatmap & Metrics**: Tracks coding volume, streaks, and achievements using real records from MongoDB.
-
-### 4. Machine Learning-Powered Analytics
-- **Random Forest Area Predictor**: Leverages `scikit-learn` in the backend. When coding history accumulates, the system fits a Random Forest Classifier on historical parameters (time spent, errors made, hints requested) to predict user weaknesses and recommend practice modules.
-
-### 5. Automated Seeding & MongoDB Schema
-- **Collections Created**: `users`, `sessions`, `coding_history`, `achievements`, `leaderboard`, `progress`, `analytics`, `badges`.
-- **Database Bootstrapping**: Seeds sample developers automatically on startup if the database is empty, establishing a realistic global leaderboard and user progress right away.
+This repository houses the entire full-stack system, featuring a **Next.js** frontend, a **FastAPI** backend, a **MongoDB** persistence layer, a custom **WebSocket connection manager** for real-time dashboard updates, and a **Machine Learning engine** powered by Scikit-Learn for predicting student weaknesses.
 
 ---
 
-## 🛠️ Technology Stack
+## 🏆 Key Features of the Platform
 
-| Component | Technology | Description |
-| :--- | :--- | :--- |
-| **Frontend** | Next.js 15.3.4 (App Router) | Core user interface, animations, routing. |
-| **Styling** | Tailwind CSS & CSS variables | High-fidelity dark glassmorphic design system. |
-| **Backend** | FastAPI | Async Python framework, endpoint routing. |
-| **Database** | MongoDB (via Motor client) | Async data storage and persistence. |
-| **AI Integration**| Google Gemini AI SDK | Multi-turn chat, explanation, quiz, and roadmap generation. |
-| **ML Engine** | Scikit-Learn | Random Forest Classifier for student weak-area forecasting. |
+### 1. Modern Glassmorphic Code Editor & Compiler
+* **Custom Language Selection Dropdown**: A custom React-based dropdown component designed to display over all editor panels. Solves native HTML `select` constraints using high `z-index` layering, custom scroll containers, and click-away hook handlers. Animated with scale-in and fade transitions.
+* **Minimalist Toolbar**: Reclaimed vertical and horizontal space by removing unnecessary macOS layout window controls, aligning editor metadata, file tabs, and action tools perfectly.
+* **Hybrid Execution Subsystem**: Integrated remote execution via Judge0 API and a robust local fallback compiler engine. If remote services are unavailable, the platform automatically compiles and runs Python, JavaScript, C++, C, and Java code directly on your local system.
+
+### 2. Live Dynamic Dashboard (Zero Reloads)
+* **WebSocket Synchronization**: Client-side listener updates the dashboard state (XP progress bars, daily streaks, sessions, completed challenges) immediately as soon as a coding or quiz event completes in the database.
+* **Personalized AI Weak-Area Predictor**: Runs a local **Random Forest Classifier** (`scikit-learn`) on database records. It tracks parameters like average time spent, compile errors, and hints consumed per topic, using actual coding history to classify user weak areas and recommend practice problems.
+* **Dynamic Activity Heatmap & Leaderboard**: Displays real coding metrics. Generates a global leaderboard ranked dynamically by XP directly from MongoDB.
+
+### 3. Personal AI Mentor (Google Gemini)
+* **Multimodal Chat & Explanations**: A multi-turn mentoring chat with conversational memory, specialized context prompts (DSA, Debug, System Design), and multilingual options.
+* **Step-by-Step DSA Visualizer**: Produces structural definition notes, ASCII-art visual diagrams, step-by-step executions, and dry runs with code implementations in Python, Java, C++, and JavaScript.
 
 ---
 
-## 📦 Directory Structure
+## 🛠️ System Architecture
+
+* **Frontend**: Next.js 15.3.4 (App Router) using Tailwind CSS and CSS-variable theme tokens.
+* **Backend**: FastAPI (Python 3.10+) running a Motor-driven async MongoDB client.
+* **Database**: MongoDB (Local or remote instance) with automatic index setup.
+* **Analytics**: Scikit-Learn (Random Forest) & Numpy.
+* **Real-time Engine**: Python WebSockets & ASGI lifespan events.
+
+---
+
+## 📁 Repository Structure
 
 ```text
 CodeSage-AI/
 ├── backend/
 │   ├── app/
 │   │   ├── api/
-│   │   │   ├── routes/              # Auth, AI, Learn, Practice, Interview, Analytics, History
-│   │   │   └── router.py            # Main API endpoint router
+│   │   │   ├── routes/              # Auth, AI, Learn, Practice, Interview, Analytics, History endpoints
+│   │   │   └── router.py            # API routing registry
 │   │   ├── core/
-│   │   │   ├── config.py            # Pydantic Settings configuration validator
-│   │   │   ├── database.py          # MongoDB client connector and collection definitions
-│   │   │   ├── events.py            # WebSocket connection manager
-│   │   │   └── security.py          # JWT, passwords and cryptography utilities
+│   │   │   ├── config.py            # Pydantic environment configuration
+│   │   │   ├── database.py          # MongoDB collections and automated seeding logic
+│   │   │   ├── events.py            # WebSocket manager
+│   │   │   └── security.py          # Hashing (bcrypt), authentication, and token generation
 │   │   └── services/
-│   │       ├── analytics_service.py # Scikit-Learn predictive model and event tracker
-│   │       ├── code_execution_service.py # Local fallback runner & Judge0 integration
-│   │       ├── gamification_service.py # Level calculations and achievements
-│   │       └── gemini_service.py    # Google Gemini AI wrapper
-│   ├── main.py                      # Application lifespan and startup factory
-│   └── requirements.txt             # Python dependencies
+│   │       ├── analytics_service.py # Scikit-Learn training and event tracking
+│   │       ├── code_execution_service.py # Local fallback runner & Judge0 client
+│   │       ├── gamification_service.py # Level and achievement unlocking algorithms
+│   │       └── gemini_service.py    # Google Gemini API integration
+│   ├── main.py                      # FastAPI app entrypoint
+│   └── requirements.txt             # Python requirements
 └── frontend/
     ├── src/
-    │   ├── app/                     # Page paths (learn, practice, debug, dashboard, voice)
-    │   ├── components/              # Layout, Sidebar, and LanguageDropdown components
-    │   ├── lib/                     # API routes and Auth Provider
+    │   ├── app/                     # Page routing (dashboard, debug, learn, roadmap, voice, etc.)
+    │   ├── components/              # Sidebar layouts and LanguageDropdown components
+    │   ├── lib/                     # API routes, hooks, and Authentication Provider
     │   └── styles/                  # globals.css styling system
-    ├── package.json                 # Next.js scripts and configurations
-    └── tailwind.config.js           # Theme and styling declarations
+    ├── package.json                 # Next.js commands and dependencies
+    └── tailwind.config.js           # Theme settings and CSS utilities
 ```
 
 ---
 
-## 🚦 Installation & Setup Instructions
+## 🚦 Step-by-Step Installation & Setup Guide
 
-### Prerequisites
-- **Python 3.10+**
-- **Node.js 18+**
-- **MongoDB Server** (Running locally on default port `27017` or configured in environment)
+Ensure you have **Python 3.10+**, **Node.js 18+**, and **MongoDB** installed on your system.
 
----
+### Step 1: Clone and Configure Environment Variables
+Copy `backend/.env.example` to `backend/.env` and update the properties:
 
-### Step 1: Configure Environment Variables
-Copy `backend/.env.example` to `backend/.env`.
+* **GOOGLE_API_KEY**: Retrieve a key from Google AI Studio and write it directly to the environment.
+* **MONGODB_URL**: Set to `mongodb://localhost:27017` (or your remote connection string).
+* **JUDGE0_API_KEY**: Optional RapidAPI key for remote execution. If omitted, the backend will automatically compile and execute code locally using your host's runtime interpreters.
 
-To populate the **Google Gemini API Key**, run the following secure command in your PowerShell terminal to write it directly without exposing it:
+#### 🔐 Secure Windows setup:
+Run this PowerShell command to write your Gemini API Key directly to `.env` safely:
 ```powershell
 $val = Read-Host -Prompt "Enter GOOGLE_API_KEY" -AsSecureString; $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($val); $PlainVal = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR); Add-Content -Path "backend\.env" -Value "GOOGLE_API_KEY=$PlainVal"; Write-Host "Saved."
 ```
 
 ---
 
-### Step 2: Setup the Backend
-1. Open a terminal in the `backend` folder:
+### Step 2: Spin Up the Backend Server
+1. Open your terminal and navigate to the `backend` folder:
    ```bash
    cd backend
    ```
-2. Activate your virtual environment:
-   ```powershell
-   .\venv\Scripts\activate
-   ```
-3. Install dependencies:
+2. Activate the Python virtual environment:
+   * **Windows (PowerShell)**:
+     ```powershell
+     .\venv\Scripts\activate
+     ```
+   * **macOS / Linux**:
+     ```bash
+     source venv/bin/activate
+     ```
+3. Install the dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-4. Start the backend development server:
+4. Start the FastAPI application:
    ```bash
    python -m uvicorn main:app --reload
    ```
-   *The backend will boot up, connect to MongoDB, and automatically seed initial data if empty.*
+   *Upon startup, the backend will automatically establish MongoDB indexes and populate the database with default leaderboard data if empty.*
 
 ---
 
-### Step 3: Setup the Frontend
-1. Open a terminal in the `frontend` folder:
+### Step 3: Run the Frontend Application
+1. Open a new terminal window and navigate to the `frontend` folder:
    ```bash
    cd frontend
    ```
@@ -125,16 +123,31 @@ $val = Read-Host -Prompt "Enter GOOGLE_API_KEY" -AsSecureString; $BSTR = [System
    ```bash
    npm install
    ```
-3. Run the development server:
+3. Boot the Next.js development server:
    ```bash
    npm run dev
    ```
-4. Open [http://localhost:3000](http://localhost:3000) in your web browser.
+4. Access the platform at [http://localhost:3000](http://localhost:3000) inside your browser.
 
 ---
 
-## 🧪 Verification & Testing Checklists
+## 🗄️ Database Schema & Collections
 
-- **Dashboard Verification**: Registered users should see XP levels, unlocked achievements, recent activity history, and the global leaderboard dynamically compiled from MongoDB.
-- **Code Execution Verification**: Run code inside the Practice Arena or Debug screen. Python and JavaScript run locally via script runner if RapidAPI is not defined.
-- **Real-time Synchronization**: Submit a code runner event and observe the XP level and dashboard widgets update in real-time without refreshing.
+CodeSage AI automatically provisions the following collections inside MongoDB:
+* **`users`**: Stores user profiles, credentials (hashed via bcrypt), current levels, total XP, achievements, and completed topics.
+* **`activity`**: Logs timeline events (Runs, Quizzes, AI mentor interactions) to generate activity logs and dynamic heatmaps.
+* **`analytics`**: Saves metric profiles used by the Random Forest classifier model.
+* **`coding_history`**: Holds user code revisions, compiling status, optimization outputs, and error notes.
+* **`chat_history`**: Stores conversational context logs.
+* **`leaderboard`**: Syncs active profiles dynamically sorted by global XP.
+* **`badges`**: Unlocked student badges (e.g. Bug Squasher, Algo Master, AI Whisperer).
+
+---
+
+## 🧪 Verification and Testing Checklist
+
+To verify that the setup is fully operational, perform the following validation steps:
+1. **Sign-up & Seeding check**: Register a new user on [http://localhost:3000/register](http://localhost:3000/register). Upon registration, navigate to the **Leaderboard** tab and verify that pre-seeded users are shown and ranked correctly.
+2. **Local Compiler Fallback**: Navigate to **AI Debugger** or **Practice Arena**, choose **Python** or **JavaScript**, write some code, and click **Run**. Verify that compile errors or outputs return successfully without configure keys.
+3. **Dynamic Broadcast**: Complete a practice challenge or quiz. Verify that your XP progression bar, current level badge, and achievements panel update in real-time without page reload.
+4. **Machine Learning Predictor**: Perform three coding attempts. Verify that the **AI-Detected Weak Areas** section update recommendations dynamically from the classifier engine.

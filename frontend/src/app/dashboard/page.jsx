@@ -39,8 +39,11 @@ export default function DashboardPage() {
     if (!isAuthenticated) { router.push('/login'); return; }
     fetchDashboard();
 
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    const wsBase = apiBase.replace(/^http/, 'ws');
+    let apiBase = process.env.NEXT_PUBLIC_API_URL;
+    if (!apiBase && typeof window !== 'undefined') {
+      apiBase = `http://${window.location.hostname}:8000`;
+    }
+    const wsBase = (apiBase || 'http://localhost:8000').replace(/^http/, 'ws');
     const userId = user?.id || user?.user_id;
     let socket;
 
